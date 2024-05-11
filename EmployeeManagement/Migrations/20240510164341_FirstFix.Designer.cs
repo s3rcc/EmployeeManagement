@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240510134437_InitialCreate")]
+    [Migration("20240510164341_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -37,9 +37,8 @@ namespace EmployeeManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("ClaimValue")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)");
+                    b.Property<bool>("ClaimValue")
+                        .HasColumnType("bit");
 
                     b.Property<int>("RoleID")
                         .HasColumnType("int");

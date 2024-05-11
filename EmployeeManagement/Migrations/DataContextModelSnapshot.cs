@@ -34,9 +34,8 @@ namespace EmployeeManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("ClaimValue")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(255)");
+                    b.Property<bool>("ClaimValue")
+                        .HasColumnType("bit");
 
                     b.Property<int>("RoleID")
                         .HasColumnType("int");

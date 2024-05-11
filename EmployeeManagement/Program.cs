@@ -1,6 +1,10 @@
 
 using EmployeeManagement.Data;
+using EmployeeManagement.Interfaces;
+using EmployeeManagement.Repositories;
+using EmployeeManagement.Mappers;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace EmployeeManagement
 {
@@ -20,6 +24,19 @@ namespace EmployeeManagement
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
+            //builder.Services.AddAutoMapper(typeof(MapperProfile));
+            //builder.Services.AddCors(option =>
+            //{
+            //    option.AddDefaultPolicy(builder =>
+            //    {
+            //        builder.AllowAnyOrigin();
+            //        builder.AllowAnyHeader();
+            //        builder.AllowAnyMethod();
+            //    });
+            //});
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -29,10 +46,11 @@ namespace EmployeeManagement
                 app.UseSwaggerUI();
             }
 
+            //app.UseCors(_ => _.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
