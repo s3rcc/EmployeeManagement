@@ -4,6 +4,7 @@ using EmployeeManagement.Interfaces;
 using EmployeeManagement.Repositories;
 using EmployeeManagement.Mappers;
 using Microsoft.EntityFrameworkCore;
+using EmployeeManagement.Services;
 
 
 namespace EmployeeManagement
@@ -25,8 +26,9 @@ namespace EmployeeManagement
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
 
-            //builder.Services.AddAutoMapper(typeof(MapperProfile));
+            builder.Services.AddAutoMapper(typeof(MapperProfile));
             //builder.Services.AddCors(option =>
             //{
             //    option.AddDefaultPolicy(builder =>

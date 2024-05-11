@@ -1,25 +1,45 @@
 ﻿using EmployeeManagement.Data;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Repositories
 {
     public class RoleRepository : IRoleRepository
     {
         private DataContext _context;
-        public RoleRepository()
+        public RoleRepository(DataContext dataContext)
         {
-
+            _context = dataContext;
         }
 
         public bool CreateRole(Role role)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Roles.Add(role);
+                _context.SaveChanges();
+                return true;
+            }
+            catch(Exception e)
+            {
+            return false;
+            };
         }
 
         public bool DeleteRole(Role role)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Roles.Remove(role);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Handle other exceptions
+                throw new Exception("Error occurred while deleting role.", ex);
+            }
         }
 
         public Role GetRole(int id)
@@ -42,14 +62,18 @@ namespace EmployeeManagement.Repositories
             return _context.Roles.Any(r => r.RoleID == roleId);
         }
 
-        public bool Save()
-        {
-            throw new NotImplementedException();
-        }
-
         public bool UpdateRole(Role role)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Roles.Update(role);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error occurred while updating role.", ex);
+            }
         }
     }
 }

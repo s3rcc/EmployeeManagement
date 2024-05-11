@@ -2,7 +2,7 @@
 
 namespace EmployeeManagement.Dto
 {
-    public interface RoleDTO
+    public class RoleDTO
     {
         public int RoleID { get; set; }
         public string RoleName { get; set; }
