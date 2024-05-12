@@ -15,31 +15,16 @@ namespace EmployeeManagement.Repositories
 
         public bool CreateRole(Role role)
         {
-            try
-            {
                 _context.Roles.Add(role);
                 _context.SaveChanges();
                 return true;
-            }
-            catch(Exception e)
-            {
-            return false;
-            };
         }
 
         public bool DeleteRole(Role role)
         {
-            try
-            {
                 _context.Roles.Remove(role);
                 _context.SaveChanges();
                 return true;
-            }
-            catch (Exception ex)
-            {
-                // Handle other exceptions
-                throw new Exception("Error occurred while deleting role.", ex);
-            }
         }
 
         public Role GetRole(int id)
@@ -64,16 +49,9 @@ namespace EmployeeManagement.Repositories
 
         public bool UpdateRole(Role role)
         {
-            try
-            {
                 _context.Roles.Update(role);
                 _context.SaveChanges();
                 return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error occurred while updating role.", ex);
-            }
         }
     }
 }

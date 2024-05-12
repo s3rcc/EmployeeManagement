@@ -9,6 +9,10 @@ namespace EmployeeManagement.Mappers
         public MapperProfile()
         {
             CreateMap<Role, RoleDTO>().ReverseMap();
+            CreateMap<FormType, FormTypeDTO>().ReverseMap();
+            CreateMap<Claim, ClaimDTO>().ReverseMap();
+            CreateMap<FormType, UserDTO>().ReverseMap();
+            CreateMap<User, UserDTO>().ReverseMap();
         }
     }
 }

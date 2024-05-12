@@ -10,9 +10,9 @@ namespace EmployeeManagement.Models
         public int UserID { get; set; }
         [Column(TypeName = "nvarchar(50)")]
         public string Name { get; set; }
-        [Column(TypeName = "nvarchar(50)")]
+        [EmailAddress]
         public string Email { get; set; }
-        [Column(TypeName = "nvarchar(50)")]
+        [Phone]
         public string Phone { get; set; }
         [ForeignKey("RoleID")]
         public int RoleID { get; set; }

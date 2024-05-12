@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EmployeeManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class IntitalMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,7 +44,7 @@ namespace EmployeeManagement.Migrations
                     ClaimID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClaimType = table.Column<string>(type: "nvarchar(255)", nullable: false),
-                    ClaimValue = table.Column<bool>(type: "bit", nullable: false),
+                    ClaimValue = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
                     RoleID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -65,8 +65,8 @@ namespace EmployeeManagement.Migrations
                     UserID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RoleID = table.Column<int>(type: "int", nullable: false),
                     SalaryID = table.Column<int>(type: "int", nullable: false)
                 },
@@ -92,7 +92,7 @@ namespace EmployeeManagement.Migrations
                     FormName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FormDescription = table.Column<string>(type: "text", nullable: false),
                     Attachments = table.Column<byte[]>(type: "varbinary(MAX)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: false)
+                    CreatedDate = table.Column<DateTime>(type: "date", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -148,7 +148,7 @@ namespace EmployeeManagement.Migrations
                         column: x => x.ClaimID,
                         principalTable: "Claim",
                         principalColumn: "ClaimID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_User_Claim_User_UserID",
                         column: x => x.UserID,

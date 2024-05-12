@@ -19,7 +19,7 @@ namespace EmployeeManagement.Models
         public string FormDescription { get; set; }
         [Column(TypeName = "varbinary(MAX)")]
         public string Attachments { get; set; }
-        [Column(TypeName = "datetime")]
+        [Column(TypeName = "date")]
         public DateTime CreatedDate { get; set; }
 
     }

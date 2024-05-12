@@ -25,9 +25,16 @@ namespace EmployeeManagement
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            //Dependencies Injection
             builder.Services.AddScoped<IRoleRepository, RoleRepository>();
             builder.Services.AddScoped<IRoleService, RoleService>();
-
+            builder.Services.AddScoped<IFormTypeRepository, FormTypeRepository>();
+            builder.Services.AddScoped<IFormTypeService, FormTypeService>();
+            builder.Services.AddScoped<IClaimRepository, ClaimRepository>();
+            builder.Services.AddScoped<IClaimService, ClaimService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            //Auto mapper
             builder.Services.AddAutoMapper(typeof(MapperProfile));
             //builder.Services.AddCors(option =>
             //{

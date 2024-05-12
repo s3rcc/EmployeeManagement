@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240511075343_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240511164302_IntitalMigration")]
+    partial class IntitalMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,7 +37,7 @@ namespace EmployeeManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<bool>("ClaimValue")
+                    b.Property<bool?>("ClaimValue")
                         .HasColumnType("bit");
 
                     b.Property<int>("RoleID")
@@ -63,7 +63,7 @@ namespace EmployeeManagement.Migrations
                         .HasColumnType("varbinary(MAX)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime");
+                        .HasColumnType("date");
 
                     b.Property<string>("FormDescription")
                         .IsRequired()
@@ -157,7 +157,7 @@ namespace EmployeeManagement.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -165,7 +165,7 @@ namespace EmployeeManagement.Migrations
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RoleID")
                         .HasColumnType("int");

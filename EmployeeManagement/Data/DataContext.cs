@@ -5,7 +5,7 @@ namespace EmployeeManagement.Data
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options) 
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 
         }
@@ -14,7 +14,7 @@ namespace EmployeeManagement.Data
         public DbSet<Salary> Salaries { get; set; }
         public DbSet<Form> Forms { get; set; }
         public DbSet<FormType> FormTypes { get; set; }
-        public DbSet<Claim> Claims {  get; set; }
+        public DbSet<Claim> Claims { get; set; }
         public DbSet<UserClaim> UserClaims { get; set; }
 
 
@@ -68,7 +68,7 @@ namespace EmployeeManagement.Data
             // Claim configuration
             modelBuilder.Entity<Claim>(entity =>
             {
-                
+
             });
 
             // UserClaim configuration (many-to-many relationship)
