@@ -13,6 +13,8 @@ namespace EmployeeManagement.Mappers
             CreateMap<Claim, ClaimDTO>().ReverseMap();
             CreateMap<FormType, UserDTO>().ReverseMap();
             CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<Salary, SalaryDTO>().ReverseMap();
+            CreateMap<Form, FormDTO>().ReverseMap();
         }
     }
 }

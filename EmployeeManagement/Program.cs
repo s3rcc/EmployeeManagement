@@ -13,57 +13,14 @@ namespace EmployeeManagement
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-            builder.Services.AddDbContext<DataContext>(option =>
-            {
-                option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            });
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            //Dependencies Injection
-            builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-            builder.Services.AddScoped<IRoleService, RoleService>();
-            builder.Services.AddScoped<IFormTypeRepository, FormTypeRepository>();
-            builder.Services.AddScoped<IFormTypeService, FormTypeService>();
-            builder.Services.AddScoped<IClaimRepository, ClaimRepository>();
-            builder.Services.AddScoped<IClaimService, ClaimService>();
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IUserService, UserService>();
-            //Auto mapper
-            builder.Services.AddAutoMapper(typeof(MapperProfile));
-            //builder.Services.AddCors(option =>
-            //{
-            //    option.AddDefaultPolicy(builder =>
-            //    {
-            //        builder.AllowAnyOrigin();
-            //        builder.AllowAnyHeader();
-            //        builder.AllowAnyMethod();
-            //    });
-            //});
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
-
-            //app.UseCors(_ => _.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            app.Run();
+            CreateHostBuilder(args).Build().Run();
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }

@@ -18,9 +18,9 @@ namespace EmployeeManagement.Models
         [Column(TypeName = "text")]
         public string FormDescription { get; set; }
         [Column(TypeName = "varbinary(MAX)")]
-        public string Attachments { get; set; }
+        public byte[] Attachments { get; set; }
         [Column(TypeName = "date")]
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     }
 }

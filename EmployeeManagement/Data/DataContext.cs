@@ -33,6 +33,11 @@ namespace EmployeeManagement.Data
                 entity.HasMany(u => u.Forms)
                       .WithOne(f => f.User)
                       .HasForeignKey(f => f.UserID);
+
+                // Configure relationship between User and Salary (one-to-one)
+                entity.HasOne(u => u.Salary)
+                      .WithOne(s => s.User)
+                      .HasForeignKey<Salary>(s => s.UserID);
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -54,6 +59,18 @@ namespace EmployeeManagement.Data
                 entity.HasOne(f => f.User)
                       .WithMany(u => u.Forms)
                       .HasForeignKey(f => f.UserID);
+
+                // Configure relationship between Form and FormType (many-to-one)
+                entity.HasOne(f => f.FormType)
+                      .WithMany(t => t.Forms)
+                      .HasForeignKey(f => f.TypeID);
+
+                // Configure attachments in form
+                entity.Property(f => f.Attachments)
+                .HasColumnType("varbinary(max)");
+
+                entity.Property(f => f.CreatedDate)
+              .HasDefaultValueSql("GETDATE()");
             });
 
             // FormType configuration
