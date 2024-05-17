@@ -70,35 +70,35 @@ namespace EmployeeManagement.Controllers
         }
 
 
-        [HttpPost]
-        [Route("/api/[controller]/AddNewUser")]
-        public IActionResult AddNewUser([FromBody] UserDTO userDto)
-        {
-            try
-            {
-                _userService.AddUser(userDto);
-                var response = new
-                {
-                    Message = "User added successfully!",
-                    AddedUser = userDto
-                };
-                return Ok(response);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (InvalidOperationException ex)
-            {
-                // User already exists
-                return Conflict(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
-            }
+        //[HttpPost]
+        //[Route("/api/[controller]/AddNewUser")]
+        //public IActionResult AddNewUser([FromBody] UserDTO userDto)
+        //{
+        //    try
+        //    {
+        //        _userService.AddUser(userDto);
+        //        var response = new
+        //        {
+        //            Message = "User added successfully!",
+        //            AddedUser = userDto
+        //        };
+        //        return Ok(response);
+        //    }
+        //    catch (ArgumentException ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //    catch (InvalidOperationException ex)
+        //    {
+        //        // User already exists
+        //        return Conflict(ex.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"An error occurred: {ex.Message}");
+        //    }
 
-        }
+        //}
 
 
         [HttpPut]

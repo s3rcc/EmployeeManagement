@@ -20,7 +20,7 @@ namespace EmployeeManagement.Services
         public void AddUser(UserDTO userDto)
         {
             //Check valid data
-            if (userDto == null 
+            if (userDto == null
                 || string.IsNullOrWhiteSpace(userDto.Name)
                 || string.IsNullOrWhiteSpace(userDto.Email)
                 || string.IsNullOrWhiteSpace(userDto.Phone)
