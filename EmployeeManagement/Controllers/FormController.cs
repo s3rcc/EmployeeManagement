@@ -30,7 +30,8 @@ namespace EmployeeManagement.Controllers
         }
 
         [Authorize(Policy = "AdminPolicy")]
-        [HttpGet("/api/[controller]/Forms/{id}")]
+        [HttpGet]
+        [Route("/api/[controller]/Forms/{id}")]
         public IActionResult GetFormById(int id)
         {
             try
@@ -90,7 +91,7 @@ namespace EmployeeManagement.Controllers
 
         }
 
-
+        [Authorize(Policy = "EmployeePolicy")]
         [HttpGet]
         [Route("/api/[controller]/GetFormByUserId/{id}")]
         public IActionResult GetFormByUserId(int id)
@@ -113,6 +114,7 @@ namespace EmployeeManagement.Controllers
 
         [Authorize(Policy = "EmployeePolicy")]
         [HttpPost]
+        [Route("/api/[controller]/AddNewForm")]
         public async Task<IActionResult> AddNewForm([FromForm] AddFormDTO formDto, [FromForm] List<IFormFile> attachments)
         {
             try
@@ -128,7 +130,8 @@ namespace EmployeeManagement.Controllers
         }
 
         [Authorize(Policy = "EmployeePolicy")]
-        [HttpPut("/api/[controller]/UpdateForm/{id}")]
+        [HttpPut]
+        [Route("/api/[controller]/UpdateForm/{id}")]
         public async Task<IActionResult> UpdateForm(int id, [FromForm] FormDTO formDto, [FromForm] List<IFormFile> attachments)
         {
             try
@@ -147,8 +150,9 @@ namespace EmployeeManagement.Controllers
             }
         }
 
-
-        [HttpDelete("/api/[controller]/DeleteForm/{id}")]
+        [Authorize(Policy = "AdminPolicy")]
+        [HttpDelete]
+        [Route("/api/[controller]/DeleteForm/{id}")]
         public IActionResult DeleteForm(int id)
         {
             try
@@ -167,7 +171,8 @@ namespace EmployeeManagement.Controllers
         }
 
 
-        [HttpGet("/api/[controller]/Forms/{id}/attachments")]
+        [HttpGet]
+        [Route("/api/[controller]/Forms/{id}/attachments")]
         public IActionResult GetAttachments(int id)
         {
             try
@@ -186,7 +191,8 @@ namespace EmployeeManagement.Controllers
         }
 
 
-        [HttpPost("/api/[controller]/Form/{id}/attachments")]
+        [HttpPost]
+        [Route("/api/[controller]/Form/{id}/attachments")]
         public async Task<IActionResult> AddAttachments(int id, [FromForm] List<IFormFile> attachments)
         {
             try

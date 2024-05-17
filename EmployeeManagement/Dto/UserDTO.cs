@@ -9,6 +9,5 @@ namespace EmployeeManagement.Dto
         public string Email { get; set; }
         public string Phone { get; set; }
         public int RoleID { get; set; }
-        public int SalaryID { get; set; }
     }
 }

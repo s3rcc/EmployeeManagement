@@ -6,10 +6,13 @@ namespace EmployeeManagement.RepositoryInterfaces
     {
         ICollection<Claim> GetClaims();
         Claim GetClaim(int id);
+        
+       ICollection<Claim> GetClaimsByRoleId(int id);
         ICollection<Claim> GetClaimName(string name);
         bool ClaimExists(int id);
         bool CreateClaim(Claim claim);
         bool UpdateClaim(Claim claim);
         bool DeleteClaim(Claim claim);
+        string GetClaimTypeById(int claimId);
     }
 }

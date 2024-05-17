@@ -19,11 +19,23 @@ namespace EmployeeManagement.Repositories
             return true;
         }
 
+        public bool CreateUserClaim(UserClaim userClaim)
+        {
+            _context.UserClaims.Add(userClaim);
+            _context.SaveChanges();
+            return true;
+        }
+
         public bool DeleteUser(User user)
         {
             _context.Users.Remove(user);
             _context.SaveChanges();
             return true;
+        }
+
+        public ICollection<UserClaim> GetUserClaimsByUserId(int id)
+        {
+            return _context.UserClaims.Where(x => x.UserID == id).ToList();
         }
 
         public User GetUser(int id)
@@ -61,6 +73,14 @@ namespace EmployeeManagement.Repositories
             _context.Users.Update(user);
             _context.SaveChanges();
             return true;
+        }
+
+        public bool UpdateUserClaims(ICollection<UserClaim> userClaims)
+        {
+            _context.UserClaims.UpdateRange(userClaims);
+            _context.SaveChanges();
+            return true;
+
         }
 
         public bool UserExists(int userId)

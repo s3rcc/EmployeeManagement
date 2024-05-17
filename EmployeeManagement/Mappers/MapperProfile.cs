@@ -17,6 +17,7 @@ namespace EmployeeManagement.Mappers
             CreateMap<Form, FormDTO>().ReverseMap();
             CreateMap<Form, AddFormDTO>().ReverseMap();
             CreateMap<Form, UpdateFormDTO>().ReverseMap();
+            CreateMap<UserClaim, UserClaimDTO>().ReverseMap();
         }
     }
 }

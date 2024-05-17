@@ -16,6 +16,7 @@ public class AuthenticationService : IAuthenticationService
     private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
     private readonly ISalaryRepository _salaryRepository;
+    private readonly IClaimRepository _claimRepository;
     private readonly ILogger<AuthenticationService> _logger;
 
     public AuthenticationService(
@@ -24,7 +25,8 @@ public class AuthenticationService : IAuthenticationService
         IUserRepository userRepository,
         IRoleRepository roleRepository,
         ILogger<AuthenticationService> logger,
-        ISalaryRepository salaryRepository)
+        ISalaryRepository salaryRepository,
+        IClaimRepository claimRepository)
     {
         _refreshTokenRepository = refreshTokenRepository;
         _configuration = configuration;
@@ -32,6 +34,7 @@ public class AuthenticationService : IAuthenticationService
         _roleRepository = roleRepository;
         _logger = logger;
         _salaryRepository = salaryRepository;
+        _claimRepository = claimRepository;
     }
 
     public ResponseLoginDTO Authenticator(RequestLoginDTO requestLogin)
@@ -61,24 +64,19 @@ public class AuthenticationService : IAuthenticationService
 
     public ResponseLoginDTO Register(RequestRegisterDTO register)
     {
-        _logger.LogInformation("Register method called.");
-
         if (_userRepository.GetUserByUserName(register.UserName) != null)
         {
-            _logger.LogWarning("Username already exists: {UserName}", register.UserName);
             throw new Exception("Username already exists.");
         }
 
         if (_userRepository.GetUserByEmail(register.Email) != null)
         {
-            _logger.LogWarning("Email already exists: {Email}", register.Email);
             throw new Exception("Email already exists.");
         }
 
         var role = _roleRepository.GetRole(register.RoleID);
         if (role == null)
         {
-            _logger.LogWarning("Invalid role ID: {RoleID}", register.RoleID);
             throw new Exception("Invalid role ID.");
         }
 
@@ -93,9 +91,19 @@ public class AuthenticationService : IAuthenticationService
             Phone = register.Phone,
             RoleID = register.RoleID,
         };
-
-        _logger.LogInformation("Creating user: {UserName}, {Email}, {Name}, {Phone}, {RoleID}", user.UserName, user.Email, user.Name, user.Phone, user.RoleID);
         _userRepository.CreateUser(user);
+
+        var claims = _claimRepository.GetClaimsByRoleId(register.RoleID);
+        foreach (var claim in claims)
+        {
+            var userClaim = new UserClaim
+            {
+                UserID = user.UserID,
+                ClaimID = claim.ClaimID,
+                IsClaim = true
+            };
+            _userRepository.CreateUserClaim(userClaim);
+        }
 
         var salary = new Salary
         {
@@ -104,11 +112,9 @@ public class AuthenticationService : IAuthenticationService
             User = user
         };
 
-        _logger.LogInformation("Creating salary for user: {UserName}", user.UserName);
         _salaryRepository.CreateSalary(salary);
 
         user.SalaryID = salary.SalaryID;
-        _logger.LogInformation("Updating user with SalaryID: {SalaryID}", user.SalaryID);
         _userRepository.UpdateUser(user);
 
         var token = GenerateJwtToken(user);

@@ -1,6 +1,7 @@
 ﻿using EmployeeManagement.Data;
 using EmployeeManagement.Models;
 using EmployeeManagement.RepositoryInterfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Repositories
 {
@@ -44,6 +45,17 @@ namespace EmployeeManagement.Repositories
         public ICollection<Claim> GetClaims()
         {
             return _context.Claims.OrderBy(x => x.ClaimID).ToList();
+        }
+
+        public ICollection<Claim> GetClaimsByRoleId(int id)
+        {
+            return _context.Claims.OrderBy(x => x.RoleID == id).ToList();
+        }
+
+        public string GetClaimTypeById(int claimId)
+        {
+            var claim = _context.Claims.FirstOrDefault(c => c.ClaimID == claimId);
+            return claim.ClaimType;
         }
 
         public bool UpdateClaim(Claim claim)

@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagement.Controllers
 {
-    [Authorize(Policy = "AdminPolicy")]
+    
     [ApiController]
     [Route("[controller]")]
+    [Authorize(Policy = "AdminPolicy")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
