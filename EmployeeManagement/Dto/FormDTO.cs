@@ -1,5 +1,4 @@
-﻿using EmployeeManagement.Models;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿
 
 namespace EmployeeManagement.Dto
 {

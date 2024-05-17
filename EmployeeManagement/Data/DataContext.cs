@@ -16,6 +16,7 @@ namespace EmployeeManagement.Data
         public DbSet<FormType> FormTypes { get; set; }
         public DbSet<Claim> Claims { get; set; }
         public DbSet<UserClaim> UserClaims { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,6 +39,10 @@ namespace EmployeeManagement.Data
                 entity.HasOne(u => u.Salary)
                       .WithOne(s => s.User)
                       .HasForeignKey<Salary>(s => s.UserID);
+
+                entity.HasMany(r => r.RefreshTokens)
+                      .WithOne(u => u.User)
+                      .HasForeignKey(u => u.UserID);
             });
 
             modelBuilder.Entity<Role>(entity =>
@@ -111,6 +116,18 @@ namespace EmployeeManagement.Data
                 entity.HasOne(s => s.User)
                       .WithOne(u => u.Salary)
                       .HasForeignKey<Salary>(s => s.UserID);
+            });
+
+            modelBuilder.Entity<RefreshToken>(entity =>
+            {
+                // Configure the primary key
+                entity.HasKey(rt => rt.ID);
+
+                // Configure the relationship with User
+                entity.HasOne(rt => rt.User)
+                      .WithMany(u => u.RefreshTokens)
+                      .HasForeignKey(rt => rt.UserID);
+                // Other configurations
             });
         }
     }

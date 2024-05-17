@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeManagement.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240514053521_UpdateForm")]
-    partial class UpdateForm
+    [Migration("20240517074058_fixMigration")]
+    partial class fixMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,12 +58,14 @@ namespace EmployeeManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FormID"));
 
-                    b.Property<string>("Attachments")
+                    b.Property<byte[]>("Attachments")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("date");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("date")
+                        .HasDefaultValueSql("GETDATE()");
 
                     b.Property<string>("FormDescription")
                         .IsRequired()
@@ -103,6 +105,33 @@ namespace EmployeeManagement.Migrations
                     b.HasKey("TypeID");
 
                     b.ToTable("Form_Type");
+                });
+
+            modelBuilder.Entity("EmployeeManagement.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<DateTime>("Expire")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("RefreshToken");
                 });
 
             modelBuilder.Entity("EmployeeManagement.Models.Role", b =>
@@ -163,6 +192,10 @@ namespace EmployeeManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -172,6 +205,10 @@ namespace EmployeeManagement.Migrations
 
                     b.Property<int>("SalaryID")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserID");
 
@@ -224,6 +261,17 @@ namespace EmployeeManagement.Migrations
                         .IsRequired();
 
                     b.Navigation("FormType");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EmployeeManagement.Models.RefreshToken", b =>
+                {
+                    b.HasOne("EmployeeManagement.Models.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -289,6 +337,8 @@ namespace EmployeeManagement.Migrations
             modelBuilder.Entity("EmployeeManagement.Models.User", b =>
                 {
                     b.Navigation("Forms");
+
+                    b.Navigation("RefreshTokens");
 
                     b.Navigation("Salary")
                         .IsRequired();

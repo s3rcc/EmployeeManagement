@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using EmployeeManagement.Dto;
 using EmployeeManagement.Interfaces;
-using EmployeeManagement.Models;
-using EmployeeManagement.Repositories;
-using System.Security.Claims;
+using EmployeeManagement.RepositoryInterfaces;
 
 namespace EmployeeManagement.Services
 {

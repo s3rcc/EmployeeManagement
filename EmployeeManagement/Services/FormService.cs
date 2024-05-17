@@ -2,9 +2,7 @@
 using EmployeeManagement.Dto;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
-using EmployeeManagement.Repositories;
-using Microsoft.SqlServer.Server;
-using System.Net.Mail;
+using EmployeeManagement.RepositoryInterfaces;
 
 namespace EmployeeManagement.Services
 {

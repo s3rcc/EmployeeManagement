@@ -1,15 +1,18 @@
 ﻿using EmployeeManagement.Models;
 
-namespace EmployeeManagement.Interfaces
+namespace EmployeeManagement.RepositoryInterfaces
 {
     public interface IUserRepository
     {
         ICollection<User> GetUsers();
         User GetUser(int id);
         ICollection<User> GetUserName(string name);
+        User GetUserByUserName(string userName);
+        User GetUserByEmail(string email);
         bool UserExists(int userId);
         bool CreateUser(User user);
         bool UpdateUser(User user);
         bool DeleteUser(User user);
+        User GetUserByRefreshToken(string refreshToken);
     }
 }

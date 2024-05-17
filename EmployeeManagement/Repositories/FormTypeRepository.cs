@@ -1,6 +1,6 @@
 ﻿using EmployeeManagement.Data;
-using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
+using EmployeeManagement.RepositoryInterfaces;
 
 namespace EmployeeManagement.Repositories
 {

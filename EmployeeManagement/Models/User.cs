@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmployeeManagement.Models
@@ -12,6 +13,8 @@ namespace EmployeeManagement.Models
         public string Name { get; set; }
         [EmailAddress]
         public string Email { get; set; }
+        public string UserName { get; set; }
+        public string PasswordHash { get; set; }
         [Phone]
         public string Phone { get; set; }
         [ForeignKey("RoleID")]
@@ -22,5 +25,6 @@ namespace EmployeeManagement.Models
         public Salary Salary { get; set; }
         public ICollection<Form> Forms { get; set; }
         public ICollection<UserClaim> UserClaims { get; set; }
+        public ICollection<RefreshToken> RefreshTokens { get; set; }
     }
 }

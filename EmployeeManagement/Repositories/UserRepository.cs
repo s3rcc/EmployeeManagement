@@ -1,6 +1,6 @@
 ﻿using EmployeeManagement.Data;
-using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
+using EmployeeManagement.RepositoryInterfaces;
 
 namespace EmployeeManagement.Repositories
 {
@@ -27,7 +27,22 @@ namespace EmployeeManagement.Repositories
 
         public User GetUser(int id)
         {
-            return _context.Users.Where(x => x.UserID == id).FirstOrDefault();
+            return _context.Users.Where(x => x.UserID == id).FirstOrDefault();  
+        }
+
+        public User GetUserByEmail(string email)
+        {
+            return _context.Users.Where(x => x.Email == email).FirstOrDefault();
+        }
+
+        public User GetUserByRefreshToken(string refreshToken)
+        {
+            return _context.Users.Where(x => x.RefreshTokens.Any(t => t.Token == refreshToken)).FirstOrDefault();
+        }
+
+        public User GetUserByUserName(string userName)
+        {
+            return _context.Users.Where(x => x.UserName == userName).FirstOrDefault();
         }
 
         public ICollection<User> GetUserName(string name)

@@ -1,5 +1,5 @@
 ﻿using EmployeeManagement.Models;
-namespace EmployeeManagement.Interfaces
+namespace EmployeeManagement.RepositoryInterfaces
 {
     public interface ISalaryRepository
     {

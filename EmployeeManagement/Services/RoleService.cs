@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using EmployeeManagement.Data;
 using EmployeeManagement.Dto;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
+using EmployeeManagement.RepositoryInterfaces;
 
 namespace EmployeeManagement.Services
 {

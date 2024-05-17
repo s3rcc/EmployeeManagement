@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using EmployeeManagement.Dto;
 using EmployeeManagement.Interfaces;
-using EmployeeManagement.Repositories;
+using EmployeeManagement.RepositoryInterfaces;
 
 namespace EmployeeManagement.Services
 {
@@ -33,56 +33,66 @@ namespace EmployeeManagement.Services
             {
                 throw new InvalidOperationException($"Role ID {userDto.RoleID} does not exist!");
             }
-            //Check claim exists
+            //Check user exists
             if (_userRepository.UserExists(userDto.UserID))
             {
                 throw new InvalidOperationException($"User with ID {userDto.UserID} already exists!");
             }
-            //Create a new claim
+            //Create a new user
             var newUser = _mapper.Map<Models.User>(userDto);
             _userRepository.CreateUser(newUser);
         }
 
         public void DeleteUser(int userId)
         {
-            var claim = _userRepository.GetUser(userId);
-            //Check if the claim exists
-            if (claim == null)
+            var user = _userRepository.GetUser(userId);
+            //Check if the user exists
+            if (user == null)
             {
-                throw new InvalidOperationException($"claim with ID {userId} does not exist!");
+                throw new InvalidOperationException($"user with ID {userId} does not exist!");
             }
-            //Process to delete the claim
-            _userRepository.DeleteUser(claim);
+            //Process to delete the user
+            _userRepository.DeleteUser(user);
         }
 
         public UserDTO GetUserById(int id)
         {
-            var claim = _userRepository.GetUser(id);
-            if (claim == null)
+            var user = _userRepository.GetUser(id);
+            if (user == null)
             {
                 throw new InvalidOperationException($"User with ID {id} does not exist.");
             }
-            return _mapper.Map<UserDTO>(claim);
+            return _mapper.Map<UserDTO>(user);
+        }
+
+        public UserDTO GetUserByUserName(string name)
+        {
+            var user = _userRepository.GetUserByUserName(name);
+            if (user == null)
+            {
+                throw new InvalidOperationException($"Not Found");
+            }
+            return _mapper.Map<UserDTO>(user);
         }
 
         public ICollection<UserDTO> GetUserName(string name)
         {
-            var claims = _userRepository.GetUserName(name);
-            if (claims == null)
+            var users = _userRepository.GetUserName(name);
+            if (users == null)
             {
                 throw new InvalidOperationException($"No result found!");
             }
-            return _mapper.Map<ICollection<UserDTO>>(claims);
+            return _mapper.Map<ICollection<UserDTO>>(users);
         }
 
         public ICollection<UserDTO> GetUsers()
         {
-            var claims = _userRepository.GetUsers();
-            if (claims == null)
+            var users = _userRepository.GetUsers();
+            if (users == null)
             {
                 throw new InvalidOperationException($"No result found!");
             }
-            return _mapper.Map<ICollection<UserDTO>>(claims);
+            return _mapper.Map<ICollection<UserDTO>>(users);
         }
 
         public void UpdateUser(UserDTO userDto)
@@ -101,7 +111,7 @@ namespace EmployeeManagement.Services
             {
                 throw new InvalidOperationException($"Role ID {userDto.RoleID} does not exist!");
             }
-            //Check claim exists
+            //Check user exists
             if (!_userRepository.UserExists(userDto.UserID))
             {
                 throw new InvalidOperationException($"User with ID {userDto.UserID} does not exist!");

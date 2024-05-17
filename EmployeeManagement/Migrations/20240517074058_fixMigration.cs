@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EmployeeManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class IntitalMigration : Migration
+    public partial class fixMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,7 +44,7 @@ namespace EmployeeManagement.Migrations
                     ClaimID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClaimType = table.Column<string>(type: "nvarchar(255)", nullable: false),
-                    ClaimValue = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
+                    ClaimValue = table.Column<bool>(type: "bit", nullable: true),
                     RoleID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -66,6 +66,8 @@ namespace EmployeeManagement.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RoleID = table.Column<int>(type: "int", nullable: false),
                     SalaryID = table.Column<int>(type: "int", nullable: false)
@@ -91,8 +93,8 @@ namespace EmployeeManagement.Migrations
                     TypeID = table.Column<int>(type: "int", nullable: false),
                     FormName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FormDescription = table.Column<string>(type: "text", nullable: false),
-                    Attachments = table.Column<byte[]>(type: "varbinary(MAX)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "date", nullable: false)
+                    Attachments = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "date", nullable: false, defaultValueSql: "GETDATE()")
                 },
                 constraints: table =>
                 {
@@ -105,6 +107,28 @@ namespace EmployeeManagement.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Form_User_UserID",
+                        column: x => x.UserID,
+                        principalTable: "User",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Expire = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_User_UserID",
                         column: x => x.UserID,
                         principalTable: "User",
                         principalColumn: "UserID",
@@ -173,6 +197,11 @@ namespace EmployeeManagement.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RefreshToken_UserID",
+                table: "RefreshToken",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Salary_UserID",
                 table: "Salary",
                 column: "UserID",
@@ -194,6 +223,9 @@ namespace EmployeeManagement.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Form");
+
+            migrationBuilder.DropTable(
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "Salary");
