@@ -9,7 +9,7 @@ namespace EmployeeManagement.Interfaces
         ICollection<FormDTO> GetFormByName(string name);
         ICollection<FormDTO> GetFormByUserId(int id);
         ICollection<FormDTO> GetFormByTypeId(int id);
-        void AddForm(FormDTO formDto, List<byte[]> attachments);
+        public void AddForm(AddFormDTO formDto, List<byte[]> attachments);
         void UpdateForm(int formId, FormDTO formDto, List<byte[]> attachments);
         void DeleteForm(int formId);
         List<byte[]> GetAttachments(int formId);

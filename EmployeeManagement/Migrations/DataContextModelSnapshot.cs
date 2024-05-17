@@ -34,9 +34,6 @@ namespace EmployeeManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<bool?>("ClaimValue")
-                        .HasColumnType("bit");
-
                     b.Property<int>("RoleID")
                         .HasColumnType("int");
 
@@ -148,6 +145,21 @@ namespace EmployeeManagement.Migrations
                     b.ToTable("Role");
                 });
 
+            modelBuilder.Entity("EmployeeManagement.Models.RoleClaim", b =>
+                {
+                    b.Property<int>("RoleID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClaimID")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleID", "ClaimID");
+
+                    b.HasIndex("ClaimID");
+
+                    b.ToTable("Role_Claim");
+                });
+
             modelBuilder.Entity("EmployeeManagement.Models.Salary", b =>
                 {
                     b.Property<int>("SalaryID")
@@ -222,8 +234,10 @@ namespace EmployeeManagement.Migrations
                     b.Property<int>("ClaimID")
                         .HasColumnType("int");
 
-                    b.Property<int>("ID")
-                        .HasColumnType("int");
+                    b.Property<bool?>("IsClaim")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.HasKey("UserID", "ClaimID");
 
@@ -235,7 +249,7 @@ namespace EmployeeManagement.Migrations
             modelBuilder.Entity("EmployeeManagement.Models.Claim", b =>
                 {
                     b.HasOne("EmployeeManagement.Models.Role", "Role")
-                        .WithMany("Claims")
+                        .WithMany()
                         .HasForeignKey("RoleID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -271,6 +285,25 @@ namespace EmployeeManagement.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EmployeeManagement.Models.RoleClaim", b =>
+                {
+                    b.HasOne("EmployeeManagement.Models.Claim", "Claim")
+                        .WithMany("RoleClaims")
+                        .HasForeignKey("ClaimID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EmployeeManagement.Models.Role", "Role")
+                        .WithMany("RoleClaims")
+                        .HasForeignKey("RoleID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Claim");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("EmployeeManagement.Models.Salary", b =>
@@ -316,6 +349,8 @@ namespace EmployeeManagement.Migrations
 
             modelBuilder.Entity("EmployeeManagement.Models.Claim", b =>
                 {
+                    b.Navigation("RoleClaims");
+
                     b.Navigation("UserClaims");
                 });
 
@@ -326,7 +361,7 @@ namespace EmployeeManagement.Migrations
 
             modelBuilder.Entity("EmployeeManagement.Models.Role", b =>
                 {
-                    b.Navigation("Claims");
+                    b.Navigation("RoleClaims");
 
                     b.Navigation("Users");
                 });

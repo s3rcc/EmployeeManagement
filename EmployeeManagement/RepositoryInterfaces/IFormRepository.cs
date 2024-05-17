@@ -9,6 +9,7 @@ namespace EmployeeManagement.RepositoryInterfaces
         ICollection<Form> GetFormByUserId(int id);
         ICollection<Form> GetFormByTypeId(int id);
         ICollection<Form> GetFormName(string name);
+        public ICollection<byte[]> GetAttachmentsForForm(int formId);
         bool FormExists(int formId);
         bool CreateForm(Form form);
         bool UpdateForm(Form form);

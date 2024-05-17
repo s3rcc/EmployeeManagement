@@ -1,10 +1,13 @@
 ﻿using EmployeeManagement.Dto;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagement.Controllers
 {
+    [Authorize (Policy = "ManagerPolicy")]
+    [Authorize (Policy = "AdminPolicy")]
     [ApiController]
     [Route("[controller]")]
     public class SalaryController : ControllerBase

@@ -15,6 +15,8 @@ namespace EmployeeManagement.Mappers
             CreateMap<User, UserDTO>().ReverseMap();
             CreateMap<Salary, SalaryDTO>().ReverseMap();
             CreateMap<Form, FormDTO>().ReverseMap();
+            CreateMap<Form, AddFormDTO>().ReverseMap();
+            CreateMap<Form, UpdateFormDTO>().ReverseMap();
         }
     }
 }

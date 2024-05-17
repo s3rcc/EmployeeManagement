@@ -1,6 +1,7 @@
 ﻿using EmployeeManagement.Dto;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagement.Controllers
@@ -15,6 +16,7 @@ namespace EmployeeManagement.Controllers
             _formService = formService;
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpGet]
         [Route("/api/[controller]/GetAllForms")]
         public IActionResult GetAllForms()
@@ -27,8 +29,8 @@ namespace EmployeeManagement.Controllers
             return Ok(forms);
         }
 
-
-        [HttpGet("{id}")]
+        [Authorize(Policy = "AdminPolicy")]
+        [HttpGet("/api/[controller]/Forms/{id}")]
         public IActionResult GetFormById(int id)
         {
             try
@@ -46,7 +48,7 @@ namespace EmployeeManagement.Controllers
             }
         }
 
-
+        [Authorize(Policy = "AdminPolicy")]
         [HttpGet]
         [Route("/api/[controller]/GetFormByName")]
         public IActionResult GetFormByName(string name)
@@ -67,9 +69,9 @@ namespace EmployeeManagement.Controllers
 
         }
 
-
+        [Authorize(Policy = "AdminPolicy")]
         [HttpGet]
-        [Route("/api/[controller]/GetFormByTypeId")]
+        [Route("/api/[controller]/GetFormByTypeId/{id}")]
         public IActionResult GetFormByTypeId(int id)
         {
             try
@@ -90,7 +92,7 @@ namespace EmployeeManagement.Controllers
 
 
         [HttpGet]
-        [Route("/api/[controller]/GetFormByUserId")]
+        [Route("/api/[controller]/GetFormByUserId/{id}")]
         public IActionResult GetFormByUserId(int id)
         {
             try
@@ -109,9 +111,9 @@ namespace EmployeeManagement.Controllers
 
         }
 
-
+        [Authorize(Policy = "EmployeePolicy")]
         [HttpPost]
-        public async Task<IActionResult> AddNewForm([FromForm] FormDTO formDto, [FromForm] List<IFormFile> attachments)
+        public async Task<IActionResult> AddNewForm([FromForm] AddFormDTO formDto, [FromForm] List<IFormFile> attachments)
         {
             try
             {
@@ -125,8 +127,8 @@ namespace EmployeeManagement.Controllers
             }
         }
 
-
-        [HttpPut("{id}")]
+        [Authorize(Policy = "EmployeePolicy")]
+        [HttpPut("/api/[controller]/UpdateForm/{id}")]
         public async Task<IActionResult> UpdateForm(int id, [FromForm] FormDTO formDto, [FromForm] List<IFormFile> attachments)
         {
             try
@@ -146,7 +148,7 @@ namespace EmployeeManagement.Controllers
         }
 
 
-        [HttpDelete("{id}")]
+        [HttpDelete("/api/[controller]/DeleteForm/{id}")]
         public IActionResult DeleteForm(int id)
         {
             try
@@ -165,7 +167,7 @@ namespace EmployeeManagement.Controllers
         }
 
 
-        [HttpGet("{id}/attachments")]
+        [HttpGet("/api/[controller]/Forms/{id}/attachments")]
         public IActionResult GetAttachments(int id)
         {
             try
@@ -184,7 +186,7 @@ namespace EmployeeManagement.Controllers
         }
 
 
-        [HttpPost("{id}/attachments")]
+        [HttpPost("/api/[controller]/Form/{id}/attachments")]
         public async Task<IActionResult> AddAttachments(int id, [FromForm] List<IFormFile> attachments)
         {
             try

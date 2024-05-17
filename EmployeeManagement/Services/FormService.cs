@@ -3,6 +3,7 @@ using EmployeeManagement.Dto;
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
 using EmployeeManagement.RepositoryInterfaces;
+using System.Security.Claims;
 
 namespace EmployeeManagement.Services
 {
@@ -11,11 +12,15 @@ namespace EmployeeManagement.Services
         private readonly IMapper _mapper;
         private readonly IFormRepository _formRepository;
         private readonly IFormTypeRepository _formTypeRepository;
-        public FormService(IMapper mapper, IFormRepository formRepository, IFormTypeRepository formTypeRepository)
+        private readonly IHttpContextAccessor _HttpContextAccessor;
+        private readonly ILogger<FormService> _logger;
+        public FormService(IMapper mapper, IFormRepository formRepository, IFormTypeRepository formTypeRepository, IHttpContextAccessor httpContextAccessor, ILogger<FormService> logger)
         {
             _mapper = mapper;
             _formRepository = formRepository;
             _formTypeRepository = formTypeRepository;
+            _HttpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
 
         public void AddAttachments(int formId, List<byte[]> attachments)
@@ -52,22 +57,45 @@ namespace EmployeeManagement.Services
             return new List<byte[]> { form.Attachments };
         }
 
-        public void AddForm(FormDTO formDto, List<byte[]> attachments)
-        {   
+        public void AddForm(AddFormDTO formDto, List<byte[]> attachments)
+        {
+            var userId = GetUserIdFromToken();
+
+            // Logging: Log the incoming form DTO
+            _logger.LogInformation("Received form DTO: {@FormDto}", formDto);
+
             if (!_formTypeRepository.FormTypeExists(formDto.TypeID))
-                throw new InvalidOperationException($"FormType with ID {formDto.TypeID} does not exist.");
-
-            if (formDto == null)
-                throw new ArgumentException("Form data is invalid.");
-
-            var form = _mapper.Map<Form>(formDto);
-            if (attachments != null && attachments.Count > 0)
             {
-                form.Attachments = attachments.SelectMany(a => a).ToArray(); // Concatenate byte arrays
+                // Logging: Log the missing form type ID
+                _logger.LogError("FormType with ID {FormTypeId} does not exist.", formDto.TypeID);
+                throw new InvalidOperationException($"FormType with ID {formDto.TypeID} does not exist.");
             }
 
-            if (!_formRepository.CreateForm(form))
-                throw new Exception("Creating form failed.");
+            if (formDto == null)
+            {
+                // Logging: Log the invalid form data
+                _logger.LogError("Form data is invalid: {@FormData}", formDto);
+                throw new ArgumentException("Form data is invalid.");
+            }
+
+            var form = _mapper.Map<Form>(formDto);
+            _logger.LogInformation("Mapped form DTO to form entity: {@FormEntity}", form);
+
+            form.UserID = userId;
+
+            if (attachments != null && attachments.Count > 0)
+            {
+                // Logging: Log the attachments count
+                _logger.LogInformation("Received {AttachmentsCount} attachments.", attachments.Count);
+
+                // Logging: Log the concatenation of byte arrays
+                form.Attachments = attachments.SelectMany(a => a).ToArray(); // Concatenate byte arrays
+                _logger.LogInformation("Concatenated attachments: {Attachments}", form.Attachments);
+            }
+
+            // Logging: Log the creation of the form
+            _logger.LogInformation("Creating form: {@Form}", form);
+            _formRepository.CreateForm(form);
         }
 
         public void DeleteForm(int formId)
@@ -150,6 +178,10 @@ namespace EmployeeManagement.Services
 
             if (!_formRepository.UpdateForm(form))
                 throw new Exception("Updating form failed.");
+        }
+        public int GetUserIdFromToken()
+        {
+            return int.Parse(_HttpContextAccessor.HttpContext.User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value);
         }
     }
 }

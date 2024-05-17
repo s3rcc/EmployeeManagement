@@ -11,11 +11,11 @@ namespace EmployeeManagement.Models
         public int ClaimID { get; set; }
         [Column(TypeName = "nvarchar(255)")]
         public string ClaimType { get; set; }
-        [DefaultValue(false)]
-        public bool? ClaimValue { get; set; }
+        
         [ForeignKey("RoleID")]
         public int RoleID { get; set; }
         public Role Role { get; set; }
         public ICollection<UserClaim> UserClaims { get; set; }
+        public ICollection<RoleClaim> RoleClaims { get; set; }
     }
 }

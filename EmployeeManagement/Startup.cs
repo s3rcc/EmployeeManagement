@@ -24,16 +24,41 @@ namespace EmployeeManagement
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddControllers();
             services.AddEndpointsApiExplorer();
-            services.AddLogging();
+            services.AddLogging(builder =>
+            {
+                builder.AddConsole();
+            });
+            services.AddHttpContextAccessor();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Employee Management API", Version = "v1" });
                 c.OperationFilter<SwaggerFileOperationFilter>();
+                // Add JWT authentication to Swagger
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Name = "JWT Authentication",
+                    Description = "Enter JWT Bearer token **_only_**",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer", // must be lower case
+                    BearerFormat = "JWT",
+                    Reference = new OpenApiReference
+                    {
+                        Id = JwtBearerDefaults.AuthenticationScheme,
+                        Type = ReferenceType.SecurityScheme
+                    }
+                };
+                c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            { securityScheme, Array.Empty<string>() }
+        });
             });
 
             var signingKey = Configuration["JwtSettings:Key"];
@@ -58,6 +83,7 @@ namespace EmployeeManagement
             services.AddAuthorization(o =>
             {
                 o.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
+                o.AddPolicy("ManagerPolicy", policy => policy.RequireRole("Manager"));
                 o.AddPolicy("EmployeePolicy", policy => policy.RequireRole("Employee"));
             });
 
@@ -107,9 +133,12 @@ namespace EmployeeManagement
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

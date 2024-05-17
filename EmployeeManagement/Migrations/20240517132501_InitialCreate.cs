@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EmployeeManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class fixMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -44,7 +44,6 @@ namespace EmployeeManagement.Migrations
                     ClaimID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClaimType = table.Column<string>(type: "nvarchar(255)", nullable: false),
-                    ClaimValue = table.Column<bool>(type: "bit", nullable: true),
                     RoleID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -77,6 +76,30 @@ namespace EmployeeManagement.Migrations
                     table.PrimaryKey("PK_User", x => x.UserID);
                     table.ForeignKey(
                         name: "FK_User_Role_RoleID",
+                        column: x => x.RoleID,
+                        principalTable: "Role",
+                        principalColumn: "RoleID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Role_Claim",
+                columns: table => new
+                {
+                    RoleID = table.Column<int>(type: "int", nullable: false),
+                    ClaimID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Role_Claim", x => new { x.RoleID, x.ClaimID });
+                    table.ForeignKey(
+                        name: "FK_Role_Claim_Claim_ClaimID",
+                        column: x => x.ClaimID,
+                        principalTable: "Claim",
+                        principalColumn: "ClaimID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Role_Claim_Role_RoleID",
                         column: x => x.RoleID,
                         principalTable: "Role",
                         principalColumn: "RoleID",
@@ -162,7 +185,7 @@ namespace EmployeeManagement.Migrations
                 {
                     ClaimID = table.Column<int>(type: "int", nullable: false),
                     UserID = table.Column<int>(type: "int", nullable: false),
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    IsClaim = table.Column<bool>(type: "bit", nullable: true, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -202,6 +225,11 @@ namespace EmployeeManagement.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Role_Claim_ClaimID",
+                table: "Role_Claim",
+                column: "ClaimID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Salary_UserID",
                 table: "Salary",
                 column: "UserID",
@@ -226,6 +254,9 @@ namespace EmployeeManagement.Migrations
 
             migrationBuilder.DropTable(
                 name: "RefreshToken");
+
+            migrationBuilder.DropTable(
+                name: "Role_Claim");
 
             migrationBuilder.DropTable(
                 name: "Salary");

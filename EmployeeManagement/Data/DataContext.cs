@@ -16,7 +16,9 @@ namespace EmployeeManagement.Data
         public DbSet<FormType> FormTypes { get; set; }
         public DbSet<Claim> Claims { get; set; }
         public DbSet<UserClaim> UserClaims { get; set; }
+        public DbSet<RoleClaim> RoleClaims { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -51,11 +53,6 @@ namespace EmployeeManagement.Data
                 entity.HasMany(r => r.Users)
                       .WithOne(u => u.Role)
                       .HasForeignKey(u => u.RoleID);
-
-                // Configure relationship between Role and Claims (one-to-many)
-                entity.HasMany(r => r.Claims)
-                      .WithOne(c => c.Role)
-                      .HasForeignKey(c => c.RoleID);
             });
 
             modelBuilder.Entity<Form>(entity =>
@@ -106,6 +103,24 @@ namespace EmployeeManagement.Data
                 // Configure relationship between UserClaim and Claim (many-to-many)
                 entity.HasOne(c => c.Claim)
                       .WithMany(uc => uc.UserClaims)
+                      .HasForeignKey(c => c.ClaimID);
+
+                // Configure default value
+                entity.Property(rl => rl.IsClaim).HasDefaultValue(true);
+            });
+            // RoleClaim configuration(many - to - many relationship)
+            modelBuilder.Entity<RoleClaim>(entity =>
+            {
+                entity.HasKey(rl => new { rl.RoleID, rl.ClaimID });
+
+                // Configure relationship between UserClaim and User (many-to-many)
+                entity.HasOne(u => u.Role)
+                      .WithMany(uc => uc.RoleClaims)
+                      .HasForeignKey(u => u.RoleID);
+
+                // Configure relationship between UserClaim and Claim (many-to-many)
+                entity.HasOne(c => c.Claim)
+                      .WithMany(uc => uc.RoleClaims)
                       .HasForeignKey(c => c.ClaimID);
             });
 

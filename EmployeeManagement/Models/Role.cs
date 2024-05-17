@@ -11,6 +11,6 @@ namespace EmployeeManagement.Models
         [Column(TypeName ="nvarchar(50)")]
         public string RoleName { get; set; }
         public ICollection<User> Users { get; set; }
-        public ICollection<Claim> Claims { get; set; }
+        public ICollection<RoleClaim> RoleClaims { get; set; }
     }
 }

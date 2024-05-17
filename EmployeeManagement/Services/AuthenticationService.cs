@@ -2,12 +2,8 @@
 using EmployeeManagement.Interfaces;
 using EmployeeManagement.Models;
 using EmployeeManagement.RepositoryInterfaces;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Authentication;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -192,6 +188,7 @@ public class AuthenticationService : IAuthenticationService
             {
                 new System.Security.Claims.Claim(ClaimTypes.Name, user.UserName),
                 new System.Security.Claims.Claim(ClaimTypes.Email, user.Email),
+                new System.Security.Claims.Claim(ClaimTypes.Role, user.Role.RoleName),
                 new System.Security.Claims.Claim(ClaimTypes.NameIdentifier, user.UserID.ToString())
             }),
             Expires = expires,

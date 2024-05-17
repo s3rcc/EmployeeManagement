@@ -1,6 +1,7 @@
 ﻿using EmployeeManagement.Data;
 using EmployeeManagement.Models;
 using EmployeeManagement.RepositoryInterfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Repositories
 {
@@ -29,6 +30,16 @@ namespace EmployeeManagement.Repositories
         public bool FormExists(int formId)
         {
             return _context.Forms.Any(x => x.FormID == formId);
+        }
+
+        public ICollection<byte[]> GetAttachmentsForForm(int formId)
+        {
+            var form = _context.Forms.FirstOrDefault(f => f.FormID == formId);
+            if (form != null)
+            {
+                return new List<byte[]> { form.Attachments };
+            }
+            return new List<byte[]>(); 
         }
 
         public Form GetForm(int id)

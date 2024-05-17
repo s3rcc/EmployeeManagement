@@ -1,6 +1,7 @@
 ﻿using EmployeeManagement.Data;
 using EmployeeManagement.Models;
 using EmployeeManagement.RepositoryInterfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Repositories
 {
@@ -42,7 +43,7 @@ namespace EmployeeManagement.Repositories
 
         public User GetUserByUserName(string userName)
         {
-            return _context.Users.Where(x => x.UserName == userName).FirstOrDefault();
+            return _context.Users.Include(u => u.Role).FirstOrDefault(x => x.UserName == userName);
         }
 
         public ICollection<User> GetUserName(string name)
